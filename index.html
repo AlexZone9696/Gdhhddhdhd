@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка подписки на канал</title>
+</head>
+<body>
+
+<h2>Проверка подписки на канал</h2>
+
+<button onclick="checkSubscription()">Проверить подписку</button>
+
+<div id="response"></div>
+
+<script>
+function checkSubscription() {
+    const botToken = '7614849397:AAE82_-UWqd7WaphZXgtNSedkXZl5OdX9Tk'; // Ваш токен бота
+    const userId = '417705458'; // ID пользователя, чью подписку нужно проверить
+    const channelId = '@TronKeyWallet'; // ID канала, на который проверяется подписка
+
+    // Формируем URL запроса
+    const url = `https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${channelId}&user_id=${userId}`;
+
+    // Выполняем запрос с помощью Fetch API
+    fetch(url)
+        .then(response => response.json()) // Парсим ответ как JSON
+        .then(data => {
+            // Проверяем статус ответа
+            if (data.ok) {
+                // Если ok=true, выводим полный ответ
+                document.getElementById('response').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } else {
+                // Если ok=false, выводим сообщение о проблемах
+                document.getElementById('response').innerHTML = 'Ошибка: не удалось получить данные о подписке.';
+            }
+        })
+        .catch(error => {
+            // В случае ошибки выводим сообщение об ошибке
+            document.getElementById('response').innerHTML = 'Произошла ошибка при запросе: ' + error.message;
+        });
+}
+</script>
+
+</body>
+</html>
